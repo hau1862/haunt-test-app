@@ -1,0 +1,6 @@
+.shadowenv.d
+.vscode
+node_modules
+prisma
+public
+.shopify

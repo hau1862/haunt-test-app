@@ -1,0 +1,14 @@
+node_modules
+build
+app/build
+public/build/
+public/_dev
+app/public/build
+prisma/dev.sqlite
+prisma/dev.sqlite-journal
+extensions/*/dist
+database.sqlite
+package-lock.json
+.cache
+.env
+.vscode
