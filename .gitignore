@@ -6,7 +6,7 @@ public/_dev
 app/public/build
 prisma/dev.sqlite
 prisma/dev.sqlite-journal
-extensions/*/dist
+extensions
 database.sqlite
 package-lock.json
 .cache
