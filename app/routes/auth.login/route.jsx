@@ -38,16 +38,7 @@ export default function Auth() {
 							<Text variant="headingMd" as="h2">
 								Log in
 							</Text>
-							<TextField
-								type="text"
-								name="shop"
-								label="Shop domain"
-								helpText="example.myshopify.com"
-								value={shop}
-								onChange={setShop}
-								autoComplete="on"
-								error={errors.shop}
-							/>
+							<TextField type="text" name="shop" label="Shop domain" helpText="example.myshopify.com" value={shop} onChange={setShop} autoComplete="on" error={errors.shop} />
 							<Button submit>Log in</Button>
 						</FormLayout>
 					</Form>

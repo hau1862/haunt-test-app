@@ -33,7 +33,7 @@ export default {
 	read: async function (request = {}, data = { id: "" }) {
 		return 0;
 	},
-	readAll: async function (request = {}, data = { id: "" }) {
+	all: async function (request = {}, data = { id: "" }) {
 		return 0;
 	},
 	update: async function (request = {}, data = { id: "" }) {
