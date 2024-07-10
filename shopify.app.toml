@@ -3,7 +3,7 @@
 client_id = "323e438a217f30c4d8881fe4e776ec15"
 name = "HauNT Test App"
 handle = "haunt-test-app-2"
-application_url = "https://terrorists-stuck-scotland-wings.trycloudflare.com"
+application_url = "https://possible-letting-abandoned-worse.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,14 +17,10 @@ scopes = "read_customers,read_gift_cards,read_orders,read_products,write_custome
 
 [auth]
 redirect_urls = [
-  "https://terrorists-stuck-scotland-wings.trycloudflare.com/auth/callback",
-  "https://terrorists-stuck-scotland-wings.trycloudflare.com/auth/shopify/callback",
-  "https://terrorists-stuck-scotland-wings.trycloudflare.com/api/auth/callback"
+	"https://possible-letting-abandoned-worse.trycloudflare.com/auth/callback",
+	"https://possible-letting-abandoned-worse.trycloudflare.com/auth/shopify/callback",
+	"https://possible-letting-abandoned-worse.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
 api_version = "2024-07"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks"
