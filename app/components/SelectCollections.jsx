@@ -4,7 +4,10 @@ import {
 	ResourceItem,
 	Avatar,
 	Card,
+	Button,
+	InlineStack,
 } from "@shopify/polaris";
+import { XIcon } from "@shopify/polaris-icons";
 import { useCallback, useEffect, useState } from "react";
 
 export default function SelectCollections({ collectionIds, setCollectionIds }) {
@@ -22,6 +25,15 @@ export default function SelectCollections({ collectionIds, setCollectionIds }) {
 			);
 		},
 		[allCollections],
+	);
+
+	const removeCollectionId = useCallback(
+		function (index) {
+			const ids = [...collectionIds];
+			ids.splice(index, 1);
+			setCollectionIds(ids);
+		},
+		[collectionIds, setCollectionIds],
 	);
 
 	useEffect(function () {
@@ -53,28 +65,40 @@ export default function SelectCollections({ collectionIds, setCollectionIds }) {
 				listTitle="Suggested Collections"
 			/>
 			<BlockStack gap="300">
-				{collectionIds.map(function (collectionId) {
+				{collectionIds.map(function (collectionId, index) {
 					const item = allCollections.find(function (collection) {
 						return collection.id === collectionId;
 					});
 
 					return (
-						<Card padding="100" key={collectionId}>
-							<ResourceItem
-								verticalAlignment="center"
-								id={item.id}
-								media={
-									<Avatar
-										customer
-										size="md"
-										name={item.title}
-									/>
-								}
-								accessibilityLabel={`View details for ${item.title} collection`}
-							>
-								{item.title}
-							</ResourceItem>
-						</Card>
+						item && (
+							<Card padding="100" key={collectionId}>
+								<InlineStack align="space-between">
+									<ResourceItem
+										verticalAlignment="center"
+										id={item.id}
+										media={
+											<Avatar
+												customer
+												size="md"
+												name={item.title}
+											/>
+										}
+										accessibilityLabel={`View details for ${item.title} collection`}
+									>
+										{item.title}
+									</ResourceItem>
+									<Button
+										icon={XIcon}
+										accessibilityLabel="Remove Collection"
+										onClick={() =>
+											removeCollectionId(index)
+										}
+										variant="plain"
+									></Button>
+								</InlineStack>
+							</Card>
+						)
 					);
 				})}
 			</BlockStack>
