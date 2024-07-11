@@ -6,8 +6,9 @@ import {
 	Card,
 	Button,
 	InlineStack,
+	Icon,
 } from "@shopify/polaris";
-import { XIcon } from "@shopify/polaris-icons";
+import { SearchIcon, XIcon } from "@shopify/polaris-icons";
 import { useCallback, useEffect, useState } from "react";
 
 export default function SelectCollections({ collectionIds, setCollectionIds }) {
@@ -20,7 +21,9 @@ export default function SelectCollections({ collectionIds, setCollectionIds }) {
 			setInputValue(inputValue);
 			setSearchCollections(
 				allCollections.filter(function (collection) {
-					return collection.title.includes(inputValue.trim());
+					return collection.title
+						.toLowerCase()
+						.includes(inputValue.trim().toLowerCase());
 				}),
 			);
 		},
@@ -55,6 +58,7 @@ export default function SelectCollections({ collectionIds, setCollectionIds }) {
 						placeholder="Vintage, cotton, summer"
 						value={inputValue}
 						onChange={changeInputValue}
+						prefix={<Icon source={SearchIcon} />}
 					/>
 				}
 				options={searchCollections.map(function (collection) {

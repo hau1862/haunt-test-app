@@ -3,7 +3,7 @@
 client_id = "323e438a217f30c4d8881fe4e776ec15"
 name = "HauNT Test App"
 handle = "haunt-test-app-2"
-application_url = "https://urls-phrases-ati-upon.trycloudflare.com"
+application_url = "https://liverpool-brilliant-dramatically-adding.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_gift_cards,read_orders,read_products,write_custome
 
 [auth]
 redirect_urls = [
-  "https://urls-phrases-ati-upon.trycloudflare.com/auth/callback",
-  "https://urls-phrases-ati-upon.trycloudflare.com/auth/shopify/callback",
-  "https://urls-phrases-ati-upon.trycloudflare.com/api/auth/callback"
+  "https://liverpool-brilliant-dramatically-adding.trycloudflare.com/auth/callback",
+  "https://liverpool-brilliant-dramatically-adding.trycloudflare.com/auth/shopify/callback",
+  "https://liverpool-brilliant-dramatically-adding.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

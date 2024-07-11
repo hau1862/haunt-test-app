@@ -1,5 +1,11 @@
-import { Autocomplete, InlineStack, Tag, BlockStack } from "@shopify/polaris";
-import { PlusCircleIcon } from "@shopify/polaris-icons";
+import {
+	Autocomplete,
+	InlineStack,
+	Tag,
+	BlockStack,
+	Icon,
+} from "@shopify/polaris";
+import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
 import { useCallback, useEffect, useState } from "react";
 
 export default function SelectProductTags({ productTags, setProductTags }) {
@@ -12,7 +18,9 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 			setInputValue(inputValue);
 			setSearchTags(
 				allTags.filter(function (tag) {
-					return tag.includes(inputValue.trim());
+					return tag
+						.toLowerCase()
+						.includes(inputValue.trim().toLowerCase());
 				}),
 			);
 		},
@@ -54,6 +62,7 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 						placeholder="Vintage, cotton, summer"
 						value={inputValue}
 						onChange={changeInputValue}
+						prefix={<Icon source={SearchIcon} />}
 					/>
 				}
 				options={searchTags.map(function (tags) {
