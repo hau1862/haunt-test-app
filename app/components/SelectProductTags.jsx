@@ -1,10 +1,4 @@
-import {
-	Autocomplete,
-	InlineStack,
-	Tag,
-	BlockStack,
-	Icon,
-} from "@shopify/polaris";
+import { Autocomplete, InlineStack, Tag, BlockStack, Icon } from "@shopify/polaris";
 import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
 import { useCallback, useEffect, useState } from "react";
 
@@ -13,32 +7,22 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 	const [inputValue, setInputValue] = useState("");
 	const [searchTags, setSearchTags] = useState(allTags);
 
-	const changeInputValue = useCallback(
-		function (inputValue) {
-			setInputValue(inputValue);
-			setSearchTags(
-				allTags.filter(function (tag) {
-					return tag
-						.toLowerCase()
-						.includes(inputValue.trim().toLowerCase());
-				}),
-			);
-		},
-		[allTags],
-	);
+	const changeInputValue = useCallback(function (inputValue) {
+		setInputValue(inputValue);
+		setSearchTags(allTags.filter(function (item) {
+			return item.toLowerCase().includes(inputValue.toLowerCase());
+		}));
+	}, [allTags]);
 
-	const addProductTag = useCallback(function () {
-		console.log("Add Tag");
-	}, []);
+	const addProductTag = useCallback(function (productTag) {
+		setProductTags(productTags.concat(productTag))
+	}, [productTags, setProductTags]);
 
-	const removeProductTag = useCallback(
-		function (index) {
-			const selectedTags = [...productTags];
-			selectedTags.splice(index, 1);
-			setProductTags(selectedTags);
-		},
-		[productTags, setProductTags],
-	);
+	const removeProductTag = useCallback(function (productTag) {
+		setProductTags(productTags.filter(function(item) {
+			return item !== productTag;
+		}));
+	}, [productTags, setProductTags]);
 
 	useEffect(function () {
 		const data = ["Vintage", "Cotton", "Summer", "Winter"];
@@ -50,40 +34,18 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 		<BlockStack gap="300">
 			<Autocomplete
 				allowMultiple
-				actionBefore={{
-					accessibilityLabel: "Add new tag",
-					content: "Add",
-					icon: PlusCircleIcon,
-					badge: { tone: "new", content: "New!" },
-					onAction: addProductTag,
-				}}
-				textField={
-					<Autocomplete.TextField
-						placeholder="Vintage, cotton, summer"
-						value={inputValue}
-						onChange={changeInputValue}
-						prefix={<Icon source={SearchIcon} />}
-					/>
-				}
-				options={searchTags.map(function (tags) {
-					return { label: tags, value: tags };
-				})}
+				actionBefore={{ content: "Add", icon: PlusCircleIcon, onAction: addProductTag }}
+				textField={<Autocomplete.TextField value={inputValue} onChange={changeInputValue} prefix={<Icon source={SearchIcon} />} />}
+				options={searchTags.map((item) => ({ label: item, value: item }))}
 				selected={productTags}
 				onSelect={setProductTags}
 				listTitle="Suggested Product Tags"
 			/>
 			<InlineStack gap="200">
-				{productTags.map(function (productTag, index) {
-					return (
-						<Tag
-							onRemove={() => removeProductTag(index)}
-							key={productTag + index}
-						>
-							<div style={{ padding: "4px 8px" }}>
-								{productTag}
-							</div>
-						</Tag>
-					);
+				{productTags.map(function (item) {
+					return <Tag onRemove={() => removeProductTag(item)} key={item}>
+						<div style={{ padding: "4px 8px" }}>{item}</div>
+					</Tag>;
 				})}
 			</InlineStack>
 		</BlockStack>

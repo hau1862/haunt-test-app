@@ -1,7 +1,7 @@
 import { authenticate } from "../shopify.server";
 
 export default {
-	create: async function (request, data = { tag: "" }) {
+	create: async function (request = {}, data = { tag: "" }) {
 		const { admin } = await authenticate.admin(request);
 
 		const response = await admin.graphql(
@@ -21,13 +21,19 @@ export default {
 			},
 		);
 
-		return await response.json();
+		const responseJson = await response.json();
+
+		return responseJson.data.productTagCreate.productTag.edges.map(
+			function (item) {
+				return item.node;
+			},
+		);
 	},
-	all: async function (request, data = { first: 10 }) {
+	all: async function (request = {}, data = { first: 10 }) {
 		const { admin } = await authenticate.admin(request);
 
 		const response = await admin.graphql(
-			`query productTagReadAll($first: first!) {
+			`query productTags($first: first!) {
 				productTag(first: $first) {
 					edges {
 						node
@@ -41,6 +47,10 @@ export default {
 			},
 		);
 
-		return await response.json();
+		const responseJson = await response.json();
+
+		return responseJson.data.productTag.edges.map(function (item) {
+			return item.node;
+		});
 	},
 };
