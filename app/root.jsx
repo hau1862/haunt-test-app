@@ -5,11 +5,10 @@ import {
 	Scripts,
 	ScrollRestoration,
 } from "@remix-run/react";
-import "./index.css";
 
 export default function App() {
 	return (
-		<html>
+		<html lang="en">
 			<head>
 				<meta charSet="utf-8" />
 				<meta
@@ -19,12 +18,23 @@ export default function App() {
 				<link rel="preconnect" href="https://cdn.shopify.com/" />
 				<link
 					rel="stylesheet"
+					type="text/css"
 					href="https://cdn.shopify.com/static/fonts/inter/v4/styles.css"
 				/>
 				<Meta />
 				<Links />
 			</head>
 			<body>
+				<style>{`
+				.Polaris-Modal-Dialog__Modal .Polaris-Text--root.Polaris-Text--break:has(.modal-title) {
+					width: 100%;
+				}
+
+				.modal-title {
+					font-size: 22px;
+					text-align: center;
+				}
+			`}</style>
 				<Outlet />
 				<ScrollRestoration />
 				<Scripts />

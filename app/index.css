@@ -1,9 +1,0 @@
-.Polaris-Modal-Dialog__Modal
-	.Polaris-Text--root.Polaris-Text--break:has(.modal-title) {
-	width: 100%;
-}
-
-.modal-title {
-	font-size: 22px;
-	text-align: center;
-}

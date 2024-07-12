@@ -5,8 +5,7 @@ id
 title
 image {
 	url
-}
-`;
+}`;
 
 function convertToAppData(graphqlData) {
 	return {
@@ -50,12 +49,12 @@ export default {
 
 		return rawCollection ? convertToAppData(rawCollection) : {};
 	},
-	all: async function (request = {}, data = { first: 10 }) {
+	all: async function (request = {}, data = { first: 10, title: "" }) {
 		const { admin } = await authenticate.admin(request);
 
 		const response = await admin.graphql(
-			`query collections($first: Number!) {
-				collections(first: $first) {
+			`query collections($first: Int!, $query: String) {
+				collections(first: $first, query: $query) {
 					nodes {
 						${graphqlFieldsString}
 					}
@@ -64,6 +63,7 @@ export default {
 			{
 				variables: {
 					first: data.first,
+					query: `title: %${data.title}%`,
 				},
 			},
 		);

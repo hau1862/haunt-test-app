@@ -30,11 +30,11 @@ export default {
 		);
 	},
 	all: async function (request = {}, data = { first: 10 }) {
-		const { admin } = await authenticate.admin(request);
+		const { storefront } = await authenticate.public.appProxy(request);
 
-		const response = await admin.graphql(
-			`query productTags($first: first!) {
-				productTag(first: $first) {
+		const response = await storefront.graphql(
+			`query productTags($first: Int!) {
+				productTags(first: $first) {
 					edges {
 						node
 					}
@@ -49,8 +49,9 @@ export default {
 
 		const responseJson = await response.json();
 
-		return responseJson.data.productTag.edges.map(function (item) {
-			return item.node;
-		});
+		// return responseJson.data.productTag.edges.map(function (item) {
+		// 	return item.node;
+		// });
+		return responseJson;
 	},
 };

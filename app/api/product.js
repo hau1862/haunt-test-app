@@ -15,15 +15,15 @@ priceRangeV2 {
 		amount
 		currencyCode
 	}
-}
-`;
+}`;
 
 function convertToAppData(graphqlData) {
 	return {
 		id: graphqlData.id,
 		title: graphqlData.title,
-		price: graphqlData.priceRangeV2?.maxVariantPrice,
-		imageUrl: graphqlData.featuredMedia.preview?.image.url,
+		priceAmount: graphqlData.priceRangeV2?.maxVariantPrice.amount,
+		currencyCode: graphqlData.priceRangeV2?.maxVariantPrice.currencyCode,
+		imageUrl: graphqlData.featuredMedia?.preview.image.url,
 	};
 }
 
@@ -39,7 +39,10 @@ function convertToGraphqlData(appData) {
 			},
 		},
 		priceRangeV2: {
-			maxVAriantPrice: appData.price,
+			maxVariantPrice: {
+				amount: appData.priceAmount,
+				currencyCode: appData.currencyCode,
+			},
 		},
 	};
 }
@@ -68,12 +71,12 @@ export default {
 
 		return rawProduct ? convertToAppData(rawProduct) : {};
 	},
-	all: async function (request = {}, data = { title: "" }) {
+	all: async function (request = {}, data = { first: 20, title: "" }) {
 		const { admin } = await authenticate.admin(request);
 
 		const response = await admin.graphql(
-			`query products($query: String) {
-				products(query: $query) {
+			`query products($first: Int!, $query: String) {
+				products(first: $first, query: $query) {
 					nodes {
 						${graphqlFieldsString}
 					}
@@ -81,14 +84,15 @@ export default {
 			}`,
 			{
 				variables: {
-					query: `title: "%${data.title}%"`,
+					first: data.first,
+					query: `title: %${data.title}%`,
 				},
 			},
 		);
 
 		const responseJson = await response.json();
 
-		return responseJson.data.product.nodes.map(convertToAppData);
+		return responseJson.data.products.nodes.map(convertToAppData);
 	},
 	read: async function (request = {}, data = { id: "" }) {
 		const { admin } = await authenticate.admin(request);
