@@ -63,7 +63,7 @@ export default {
 			{
 				variables: {
 					first: data.first,
-					query: `title: %${data.title}%`,
+					// query: `title: %${data.title}%`,
 				},
 			},
 		);

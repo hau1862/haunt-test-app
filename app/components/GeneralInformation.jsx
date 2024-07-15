@@ -1,33 +1,18 @@
 import { useCallback } from "react";
 import { Card, Text, TextField, BlockStack, Select } from "@shopify/polaris";
 
-export default function GeneralInformation({
-	generalFormation,
-	setGeneralInformation,
-}) {
-	const changeName = useCallback(
-		function (name) {
-			setGeneralInformation({ ...generalFormation, name });
-		},
-		[generalFormation, setGeneralInformation],
-	);
+export default function GeneralInformation({ generalInformation, setGeneralInformation }) {
+	const changeName = useCallback(function (name) {
+		setGeneralInformation({ ...generalInformation, name });
+	}, [generalInformation, setGeneralInformation]);
 
-	const changePriority = useCallback(
-		function (priority) {
-			setGeneralInformation({ ...generalFormation, priority });
-		},
-		[generalFormation, setGeneralInformation],
-	);
+	const changePriority = useCallback(function (priority) {
+		setGeneralInformation({ ...generalInformation, priority });
+	}, [generalInformation, setGeneralInformation]);
 
-	const changeStatus = useCallback(
-		function (status) {
-			setGeneralInformation({
-				...generalFormation,
-				status: Number(status),
-			});
-		},
-		[generalFormation, setGeneralInformation],
-	);
+	const changeStatus = useCallback(function (status) {
+		setGeneralInformation({ ...generalInformation, status: Number(status) });
+	}, [generalInformation, setGeneralInformation]);
 
 	return (
 		<Card>
@@ -38,13 +23,13 @@ export default function GeneralInformation({
 				<TextField
 					type="text"
 					label="Name"
-					value={generalFormation.name}
+					value={generalInformation.name}
 					onChange={changeName}
 				/>
 				<TextField
 					type="number"
 					label="Priority"
-					value={generalFormation.priority}
+					value={generalInformation.priority}
 					onChange={changePriority}
 					min="0"
 					max="99"
@@ -53,16 +38,10 @@ export default function GeneralInformation({
 				<Select
 					label="Status"
 					options={[
-						{
-							label: "Enable",
-							value: 1,
-						},
-						{
-							label: "Disable",
-							value: 0,
-						},
+						{ label: "Enable", value: 1 },
+						{ label: "Disable", value: 0 },
 					]}
-					value={generalFormation.status}
+					value={generalInformation.status}
 					onChange={changeStatus}
 				/>
 			</BlockStack>

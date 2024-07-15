@@ -5,33 +5,21 @@ import SelectCollectionIds from "./SelectCollectionIds";
 import SelectProductTags from "./SelectProductTags";
 
 export default function ApplyProducts({ applyProducts, setApplyProducts }) {
-	const changeOption = useCallback(
-		function ([option]) {
-			setApplyProducts({ ...applyProducts, option });
-		},
-		[applyProducts, setApplyProducts],
-	);
+	const changeOption = useCallback(function ([option]) {
+		setApplyProducts({ ...applyProducts, option });
+	}, [applyProducts, setApplyProducts]);
 
-	const changeProductIds = useCallback(
-		function (productIds) {
-			setApplyProducts({ ...applyProducts, productIds });
-		},
-		[applyProducts, setApplyProducts],
-	);
+	const changeProductIds = useCallback(function (productIds) {
+		setApplyProducts({ ...applyProducts, productIds });
+	}, [applyProducts, setApplyProducts]);
 
-	const changeCollectionIds = useCallback(
-		function (collectionIds) {
-			setApplyProducts({ ...applyProducts, collectionIds });
-		},
-		[applyProducts, setApplyProducts],
-	);
+	const changeCollectionIds = useCallback(function (collectionIds) {
+		setApplyProducts({ ...applyProducts, collectionIds });
+	}, [applyProducts, setApplyProducts]);
 
-	const changeProductTags = useCallback(
-		function (productTags) {
-			setApplyProducts({ ...applyProducts, productTags });
-		},
-		[applyProducts, setApplyProducts],
-	);
+	const changeProductTags = useCallback(function (productTags) {
+		setApplyProducts({ ...applyProducts, productTags });
+	}, [applyProducts, setApplyProducts]);
 
 	return (
 		<Card>
@@ -50,14 +38,10 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 							value: 1,
 							renderChildren(isSelected) {
 								return (
-									isSelected && (
-										<SelectProductIds
-											productIds={[
-												...applyProducts.productIds,
-											]}
-											setProductIds={changeProductIds}
-										/>
-									)
+									isSelected && <SelectProductIds
+										productIds={[...applyProducts.productIds]}
+										setProductIds={changeProductIds}
+									/>
 								);
 							},
 						},
@@ -66,16 +50,10 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 							value: 2,
 							renderChildren(isSelected) {
 								return (
-									isSelected && (
-										<SelectCollectionIds
-											collectionIds={[
-												...applyProducts.collectionIds,
-											]}
-											setCollectionIds={
-												changeCollectionIds
-											}
-										/>
-									)
+									isSelected && <SelectCollectionIds
+										collectionIds={[...applyProducts.collectionIds]}
+										setCollectionIds={changeCollectionIds}
+									/>
 								);
 							},
 						},
@@ -84,14 +62,10 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 							value: 3,
 							renderChildren(isSelected) {
 								return (
-									isSelected && (
-										<SelectProductTags
-											productTags={[
-												...applyProducts.productTags,
-											]}
-											setProductTags={changeProductTags}
-										/>
-									)
+									isSelected && <SelectProductTags
+										productTags={[...applyProducts.productTags]}
+										setProductTags={changeProductTags}
+									/>
 								);
 							},
 						},

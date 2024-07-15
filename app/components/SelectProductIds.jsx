@@ -1,17 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-	BlockStack,
-	TextField,
-	Card,
-	Button,
-	InlineStack,
-	ResourceList,
-	ResourceItem,
-	Avatar,
-	Modal,
-	Filters,
-	Icon,
-} from "@shopify/polaris";
+import { BlockStack, TextField, Card, Button, InlineStack, ResourceList, ResourceItem, Avatar, Modal, Filters, Icon } from "@shopify/polaris";
 import { SearchIcon, XIcon } from "@shopify/polaris-icons";
 import { useFetcher } from "@remix-run/react";
 
@@ -21,6 +9,14 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 	const [showModal, setShowModal] = useState(false);
 	const [searchProducts, setSearchProducts] = useState([]);
 	const [currentProductIds, setCurrentProductIds] = useState([]);
+	
+	const changeSearchText = useCallback(function (searchText) {
+		setSearchText(searchText);
+		fetcher.submit(
+			{ name: "products", data: { first: 20, title: searchText } },
+			{ method: "POST", encType: "application/json" },
+		);
+	}, [fetcher])
 
 	const removeProductId = useCallback(
 		function (productId) {
@@ -85,19 +81,7 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 					filterControl={
 						<Filters
 							queryValue={searchText}
-							onQueryChange={function (searchText) {
-								setSearchText(searchText);
-								fetcher.submit(
-									{
-										name: "products",
-										data: { first: 20, title: searchText },
-									},
-									{
-										method: "POST",
-										encType: "application/json",
-									},
-								);
-							}}
+							onQueryChange={changeSearchText}
 							filters={[]}
 							queryPlaceholder="Enter product name"
 						/>

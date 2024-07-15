@@ -1,11 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-	Autocomplete,
-	InlineStack,
-	Tag,
-	BlockStack,
-	Icon,
-} from "@shopify/polaris";
+import { Autocomplete, InlineStack, Tag, BlockStack, Icon } from "@shopify/polaris";
 import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
 import { useFetcher } from "@remix-run/react";
 
@@ -14,39 +8,23 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 	const [allTags, setAllTags] = useState([]);
 	const [inputValue, setInputValue] = useState("");
 	const [searchTags, setSearchTags] = useState(allTags);
-	console.log(fetcher);
 
-	const changeInputValue = useCallback(
-		function (inputValue) {
-			setInputValue(inputValue);
-			setSearchTags(
-				allTags.filter(function (item) {
-					return item
-						.toLowerCase()
-						.includes(inputValue.toLowerCase());
-				}),
-			);
-		},
-		[allTags],
-	);
+	const changeInputValue = useCallback(function (inputValue) {
+		setInputValue(inputValue);
+		setSearchTags(allTags.filter(function (item) {
+			return item.toLowerCase().includes(inputValue.toLowerCase());
+		}));
+	}, [allTags]);
 
-	const addProductTag = useCallback(
-		function (productTag) {
-			setProductTags(productTags.concat(productTag));
-		},
-		[productTags, setProductTags],
-	);
+	const addProductTag = useCallback(function (productTag) {
+		setProductTags(productTags.concat(productTag));
+	}, [productTags, setProductTags]);
 
-	const removeProductTag = useCallback(
-		function (productTag) {
-			setProductTags(
-				productTags.filter(function (item) {
-					return item !== productTag;
-				}),
-			);
-		},
-		[productTags, setProductTags],
-	);
+	const removeProductTag = useCallback(function (productTag) {
+		setProductTags(productTags.filter(function (item) {
+			return item !== productTag;
+		}));
+	}, [productTags, setProductTags]);
 
 	useEffect(function () {
 		fetcher.submit({}, { method: "POST" });
@@ -68,10 +46,9 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 						prefix={<Icon source={SearchIcon} />}
 					/>
 				}
-				options={searchTags.map((item) => ({
-					label: item,
-					value: item,
-				}))}
+				options={searchTags.map(function (item) {
+					return { label: item, value: item }
+				})}
 				selected={productTags}
 				onSelect={setProductTags}
 				listTitle="Suggested Product Tags"
