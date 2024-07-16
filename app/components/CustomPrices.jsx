@@ -3,7 +3,7 @@ import { Card, Text, ChoiceList, BlockStack, TextField } from "@shopify/polaris"
 
 export default function CustomPrices({ customPrices, setCustomPrices }) {
 	const changeOption = useCallback(function ([option]) {
-		setCustomPrices({ ...customPrices, option });
+		setCustomPrices({ ...customPrices, option, suffix: (option === 2 ? "%" : "$") });
 	}, [customPrices, setCustomPrices]);
 
 	const changeAmount = useCallback(function (amount) {
@@ -13,9 +13,11 @@ export default function CustomPrices({ customPrices, setCustomPrices }) {
 	return (
 		<Card>
 			<BlockStack gap="500">
-				<Text as="h1" variant="headingMd">
-					Custom Prices
-				</Text>
+				<Text 
+					as="h1"
+					variant="headingMd"
+					children="Custom Prices"
+				/>
 				<ChoiceList
 					choices={[
 						{ label: "Apply a price to selected products", value: 0 },
@@ -30,7 +32,7 @@ export default function CustomPrices({ customPrices, setCustomPrices }) {
 					label="Amount"
 					value={customPrices.amount}
 					onChange={changeAmount}
-					suffix={customPrices.option === 2 ? "%" : ""}
+					suffix={customPrices.option === 2 ? "%" : "$"}
 				/>
 			</BlockStack>
 		</Card>

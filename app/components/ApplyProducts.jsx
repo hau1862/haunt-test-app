@@ -24,9 +24,11 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 	return (
 		<Card>
 			<BlockStack gap="500">
-				<Text as="h1" variant="headingMd">
-					Apply To Products
-				</Text>
+				<Text
+					as="h1"
+					variant="headingMd"
+					children="Apply To Products"
+				/>
 				<ChoiceList
 					choices={[
 						{

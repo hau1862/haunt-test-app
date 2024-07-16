@@ -5,10 +5,10 @@ import { useFetcher } from "@remix-run/react";
 
 export default function SelectProductIds({ productIds, setProductIds }) {
 	const fetcher = useFetcher();
-	const [searchText, setSearchText] = useState("");
 	const [showModal, setShowModal] = useState(false);
+	const [searchText, setSearchText] = useState("");
 	const [searchProducts, setSearchProducts] = useState([]);
-	const [currentProductIds, setCurrentProductIds] = useState([]);
+	const [selectedProductIds, setSelectedProductIds] = useState([]);
 	
 	const changeSearchText = useCallback(function (searchText) {
 		setSearchText(searchText);
@@ -18,16 +18,11 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 		);
 	}, [fetcher])
 
-	const removeProductId = useCallback(
-		function (productId) {
-			setProductIds(
-				productIds.filter(function (item) {
-					return item !== productId;
-				}),
-			);
-		},
-		[productIds, setProductIds],
-	);
+	const removeProductId = useCallback(function (productId) {
+		setProductIds(productIds.filter(function (item) {
+			return item !== productId;
+		}));
+	}, [productIds, setProductIds]);
 
 	useEffect(function () {
 		fetcher.submit(
@@ -36,14 +31,11 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 		);
 	}, []);
 
-	useEffect(
-		function () {
-			if (fetcher.data?.ok) {
-				setSearchProducts(fetcher.data.products);
-			}
-		},
-		[fetcher],
-	);
+	useEffect(function () {
+		if (fetcher.data?.ok) {
+			setSearchProducts(fetcher.data.products);
+		}
+	}, [fetcher]);
 
 	return (
 		<BlockStack gap="400">
@@ -65,7 +57,7 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 				primaryAction={{
 					content: "Select",
 					onAction: function () {
-						setProductIds(currentProductIds);
+						setProductIds(selectedProductIds);
 						setShowModal(false);
 					},
 				}}
@@ -73,10 +65,10 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 				<ResourceList
 					resourceName={{ singular: "product", plural: "products" }}
 					items={searchProducts}
-					selectedItems={currentProductIds}
-					onSelectionChange={setCurrentProductIds}
+					selectedItems={selectedProductIds}
+					onSelectionChange={setSelectedProductIds}
 					promotedBulkActions={[
-						{ content: "Clear", onAction: () => setProductIds([]) },
+						{ content: "Clear", onAction: () => setSelectedProductIds([]) },
 					]}
 					filterControl={
 						<Filters
@@ -88,16 +80,8 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 					}
 					renderItem={function (item) {
 						return (
-							<ResourceItem
-								id={item.id}
-								name={item.name}
-								media={
-									<Avatar source={item.imageUrl} size="xl" />
-								}
-								verticalAlignment="center"
-							>
-								{item.title} <br />
-								{item.priceAmount + " " + item.currencyCode}
+							<ResourceItem id={item.id} media={<Avatar source={item.imageUrl} size="xl" />} verticalAlignment="center">
+								{item.title} <br /> {item.priceAmount + " " + item.currencyCode}
 							</ResourceItem>
 						);
 					}}
@@ -110,42 +94,16 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 					});
 
 					return (
-						item && (
-							<Card padding="100" key={item.id}>
-								<InlineStack align="space-between">
-									<ResourceItem
-										verticalAlignment="center"
-										id={item.id}
-										media={
-											<Avatar
-												source={item.imageUrl}
-												size="xl"
-											/>
-										}
-									>
-										{item.title} <br />
-										{item.priceAmount +
-											" " +
-											item.currencyCode}
-									</ResourceItem>
-									<div
-										style={{
-											padding: "0px 12px",
-											display: "flex",
-											alignItems: "center",
-										}}
-									>
-										<Button
-											icon={XIcon}
-											onClick={() =>
-												removeProductId(item.id)
-											}
-											variant="plain"
-										></Button>
-									</div>
-								</InlineStack>
-							</Card>
-						)
+						item && <Card padding="100" key={item.id}>
+							<InlineStack align="space-between">
+								<ResourceItem verticalAlignment="center"  size="xl" media={<Avatar source={item.imageUrl} />}>
+									{item.title} <br /> {item.priceAmount + " " + item.currencyCode}
+								</ResourceItem>
+								<div className="item-remove-button">
+									<Button variant="plain" icon={XIcon} onClick={() => removeProductId(item.id)} />
+								</div>
+							</InlineStack>
+						</Card>
 					);
 				})}
 			</BlockStack>

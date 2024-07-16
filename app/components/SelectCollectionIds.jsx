@@ -78,7 +78,7 @@ export default function SelectCollectionIds({ collectionIds, setCollectionIds })
 								<ResourceItem verticalAlignment="center" id={item.id} media={<Avatar source={item.imageUrl} size="xl" />}>
 									{item.title}
 								</ResourceItem>
-								<div style={{ padding: "0px 12px", display: "flex", alignItems: "center" }}>
+								<div className="item-remove-button">
 									<Button icon={XIcon} variant="plain" onClick={() => removeCollectionId(item.id)} />
 								</div>
 							</InlineStack>
