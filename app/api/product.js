@@ -85,7 +85,7 @@ export default {
 			{
 				variables: {
 					first: data.first,
-					query: `title: %${data.title}%`,
+					query: data.title && `title:*${data.title}*`,
 				},
 			},
 		);

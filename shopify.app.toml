@@ -3,7 +3,7 @@
 client_id = "323e438a217f30c4d8881fe4e776ec15"
 name = "HauNT Test App"
 handle = "haunt-test-app-2"
-application_url = "https://tier-opinions-objectives-ill.trycloudflare.com"
+application_url = "https://created-producer-decimal-carter.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_gift_cards,read_orders,read_products,write_custome
 
 [auth]
 redirect_urls = [
-  "https://tier-opinions-objectives-ill.trycloudflare.com/auth/callback",
-  "https://tier-opinions-objectives-ill.trycloudflare.com/auth/shopify/callback",
-  "https://tier-opinions-objectives-ill.trycloudflare.com/api/auth/callback"
+  "https://created-producer-decimal-carter.trycloudflare.com/auth/callback",
+  "https://created-producer-decimal-carter.trycloudflare.com/auth/shopify/callback",
+  "https://created-producer-decimal-carter.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

@@ -11,14 +11,8 @@ export default function SelectCollectionIds({ collectionIds, setCollectionIds })
 	const changeSearchText = useCallback(function (text) {
 		setSearchText(text);
 		fetcher.submit(
-			{
-				name: "collections",
-				data: { first: 20, title: text },
-			},
-			{
-				method: "POST",
-				encType: "application/json"
-			},
+			{ name: "collections", data: { first: 20, title: text } },
+			{ method: "POST", encType: "application/json" },
 		);
 	}, [fetcher])
 
@@ -30,14 +24,8 @@ export default function SelectCollectionIds({ collectionIds, setCollectionIds })
 
 	useEffect(function () {
 		fetcher.submit(
-			{
-				name: "collections",
-				data: { first: 20, title: "" },
-			},
-			{
-				method: "POST",
-				encType: "application/json",
-			},
+			{ name: "collections", data: { first: 20, title: "" } },
+			{ method: "POST", encType: "application/json" },
 		);
 	}, []);
 
