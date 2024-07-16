@@ -50,7 +50,6 @@ function convertToGraphqlData(appData) {
 export default {
 	create: async function (request = {}, data = { title: "" }) {
 		const { admin } = await authenticate.admin(request);
-
 		const response = await admin.graphql(
 			`mutation productCreate($input: ProductInput!) {
 				productCreate(input: $input) {
@@ -65,7 +64,6 @@ export default {
 				},
 			},
 		);
-
 		const responseJson = await response.json();
 		const rawProduct = responseJson.data.productCreate.product;
 
@@ -73,7 +71,6 @@ export default {
 	},
 	all: async function (request = {}, data = { first: 20, title: "" }) {
 		const { admin } = await authenticate.admin(request);
-
 		const response = await admin.graphql(
 			`query products($first: Int!, $query: String) {
 				products(first: $first, query: $query) {
@@ -89,14 +86,12 @@ export default {
 				},
 			},
 		);
-
 		const responseJson = await response.json();
 
 		return responseJson.data.products.nodes.map(convertToAppData);
 	},
 	read: async function (request = {}, data = { id: "" }) {
 		const { admin } = await authenticate.admin(request);
-
 		const response = await admin.graphql(
 			`query product($id: String) {
 				product(id: $id) {
@@ -109,7 +104,6 @@ export default {
 				},
 			},
 		);
-
 		const responseJson = await response.json();
 		const rawProduct = responseJson.data.product;
 

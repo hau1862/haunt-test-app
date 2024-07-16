@@ -41,7 +41,7 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 							renderChildren(isSelected) {
 								return (
 									isSelected && <SelectProductIds
-										productIds={[...applyProducts.productIds]}
+										productIds={applyProducts.productIds}
 										setProductIds={changeProductIds}
 									/>
 								);
@@ -53,7 +53,7 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 							renderChildren(isSelected) {
 								return (
 									isSelected && <SelectCollectionIds
-										collectionIds={[...applyProducts.collectionIds]}
+										collectionIds={applyProducts.collectionIds}
 										setCollectionIds={changeCollectionIds}
 									/>
 								);
@@ -65,7 +65,7 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 							renderChildren(isSelected) {
 								return (
 									isSelected && <SelectProductTags
-										productTags={[...applyProducts.productTags]}
+										productTags={applyProducts.productTags}
 										setProductTags={changeProductTags}
 									/>
 								);

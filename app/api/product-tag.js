@@ -1,42 +1,78 @@
 import { authenticate } from "../shopify.server";
 
+const graphqlFieldsString = `
+edges {
+	node
+}
+`;
+
+function convertToAppData(graphqlData) {
+	return graphqlData.node;
+}
+
+function convertToGraphqlData(appData) {}
+
 export default {
 	create: async function (request = {}, data = { tag: "" }) {
 		const { admin } = await authenticate.admin(request);
-
+		const createProductResponse = await admin.graphql(
+			`mutation productCreate($input: ProductInput!) {
+				productCreate(input: $input) {
+					product {
+						id
+					}
+				}	
+			}`,
+			{
+				variables: {
+					input: {
+						title: "add tag"
+					},
+				},
+			},
+		);
+		const createProductResponseJson = await createProductResponse.json();
+		const rawProduct = createProductResponseJson.data.productCreate.product;
 		const response = await admin.graphql(
-			`mutation productTagCreate($input: ProductTag!) {
-				productTagCreate(node: $input) {
-					productTag {
-						edges {
-							node
-						}
+			`mutation tagsAdd($id: ID!, $tags: [String!]!) {
+				tagsAdd(id: $id, tags: $tags) {
+					node {
+						id
 					}
 				}
 			}`,
 			{
 				variables: {
-					input: data.tag,
+					id: rawProduct.id,
+					tags: [data.tag]
 				},
 			},
 		);
-
 		const responseJson = await response.json();
-
-		return responseJson.data.productTagCreate.productTag.edges.map(
-			function (item) {
-				return item.node;
+		const deleteProductResponse = await admin.graphql(
+			`mutation productDelete($input: ProductInput!) {
+				productDelete(input: $input) {
+					deletedProductId
+				}	
+			}`,
+			{
+				variables: {
+					input: {
+						id: rawProduct.id
+					}
+				},
 			},
-		);
+		)
+
+		return responseJson.data.tagsAdd.node.id;
 	},
 	all: async function (request = {}, data = { first: 10 }) {
-		const { storefront } = await authenticate.public.appProxy(request);
-
-		const response = await storefront.graphql(
+		const { admin } = await authenticate.admin(request);
+		const response = await admin.graphql(
 			`query productTags($first: Int!) {
-				productTags(first: $first) {
-					edges {
-						node
+				shop {
+					productTags(first: $first) {
+						${graphqlFieldsString}
 					}
 				}
 			}`,
@@ -46,12 +82,8 @@ export default {
 				},
 			},
 		);
-
 		const responseJson = await response.json();
-
-		// return responseJson.data.productTag.edges.map(function (item) {
-		// 	return item.node;
-		// });
-		return responseJson;
+		
+		return responseJson.data.shop.productTags.edges.map(convertToAppData);
 	},
 };

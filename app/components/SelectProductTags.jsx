@@ -6,19 +6,22 @@ import { useFetcher } from "@remix-run/react";
 export default function SelectProductTags({ productTags, setProductTags }) {
 	const fetcher = useFetcher();
 	const [allTags, setAllTags] = useState([]);
-	const [inputValue, setInputValue] = useState("");
+	const [searchText, setSearchText] = useState("");
 	const [searchTags, setSearchTags] = useState(allTags);
 
-	const changeInputValue = useCallback(function (inputValue) {
-		setInputValue(inputValue);
+	const changeSearchText = useCallback(function (text) {
+		setSearchText(text);
 		setSearchTags(allTags.filter(function (item) {
-			return item.toLowerCase().includes(inputValue.toLowerCase());
+			return item.toLowerCase().includes(text.toLowerCase());
 		}));
 	}, [allTags]);
 
 	const addProductTag = useCallback(function (productTag) {
-		setProductTags(productTags.concat(productTag));
-	}, [productTags, setProductTags]);
+		fetcher.submit(
+			{ name: "productTagCreate", data: { tag: searchText } },
+			{ method: "POST", encType: "application/json" }
+		)
+	}, [fetcher, searchText]);
 
 	const removeProductTag = useCallback(function (productTag) {
 		setProductTags(productTags.filter(function (item) {
@@ -27,8 +30,18 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 	}, [productTags, setProductTags]);
 
 	useEffect(function () {
-		fetcher.submit({}, { method: "POST" });
+		fetcher.submit(
+			{ name: "productTags", data: { first: 20 }},
+			{ method: "POST", encType: "application/json" }
+		);
 	}, []);
+
+	useEffect(function () {
+		if(fetcher.data?.ok && fetcher.data.name === "productTags") {
+			setAllTags(fetcher.data.productTags);
+			setSearchTags(fetcher.data.productTags)
+		}
+	}, [fetcher])
 
 	return (
 		<BlockStack gap="300">
@@ -41,8 +54,8 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 				}}
 				textField={
 					<Autocomplete.TextField
-						value={inputValue}
-						onChange={changeInputValue}
+						value={searchText}
+						onChange={changeSearchText}
 						prefix={<Icon source={SearchIcon} />}
 					/>
 				}

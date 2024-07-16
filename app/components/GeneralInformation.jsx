@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { Card, Text, TextField, BlockStack, Select } from "@shopify/polaris";
 
 export default function GeneralInformation({ generalInformation, setGeneralInformation }) {
-	console.log(generalInformation)
 	const changeName = useCallback(function (name) {
 		setGeneralInformation({ ...generalInformation, name });
 	}, [generalInformation, setGeneralInformation]);

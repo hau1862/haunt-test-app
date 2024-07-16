@@ -4,6 +4,7 @@ import { useLoaderData, useNavigate } from "@remix-run/react";
 import { samplePricingRule } from "../constants";
 import productApi from "../api/product";
 import collectionApi from "../api/collection";
+import productTagApi from "../api/product-tag";
 import pricingRuleApi from "../api/pricing-rule";
 import GeneralInformation from "../components/GeneralInformation";
 import ApplyProducts from "../components/ApplyProducts";
@@ -19,11 +20,19 @@ export async function action({ request }) {
 	switch (name) {
 		case "products": {
 			const products = await productApi.all(request, data);
-			return { products, ok: true };
+			return { products, ok: true, name };
 		}
 		case "collections": {
 			const collections = await collectionApi.all(request, data);
-			return { collections, ok: true };
+			return { collections, ok: true, name };
+		}
+		case "productTags": {
+			const productTags = await productTagApi.all(request, data);
+			return { productTags, ok: true, name }
+		}
+		case "productTagCreate": {
+			const productTagCreate = await productTagApi.create(request, data);
+			return { productTagCreate, ok: true, name }
 		}
 		default: {
 			return null;

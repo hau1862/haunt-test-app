@@ -28,7 +28,6 @@ function convertToGraphqlData(appData) {
 export default {
 	create: async function (request = {}, data = { title: "" }) {
 		const { admin } = await authenticate.admin(request);
-
 		const response = await admin.graphql(
 			`mutation collectionCreate($input: CollectionInput!) {
 				collectionCreate(input: $input) {
@@ -43,7 +42,6 @@ export default {
 				},
 			},
 		);
-
 		const responseJson = await response.json();
 		const rawCollection = responseJson.data.collectionCreate.collection;
 
@@ -51,7 +49,6 @@ export default {
 	},
 	all: async function (request = {}, data = { first: 10, title: "" }) {
 		const { admin } = await authenticate.admin(request);
-
 		const response = await admin.graphql(
 			`query collections($first: Int!, $query: String) {
 				collections(first: $first, query: $query) {
@@ -67,7 +64,6 @@ export default {
 				},
 			},
 		);
-
 		const responseJson = await response.json();
 
 		return responseJson.data.collections.nodes.map(convertToAppData);
