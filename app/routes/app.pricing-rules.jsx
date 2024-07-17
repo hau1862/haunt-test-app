@@ -2,12 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { Page, Button, Icon, DataTable, TextField, BlockStack } from "@shopify/polaris";
 import { SearchIcon } from "@shopify/polaris-icons";
 import { useAppBridge } from "@shopify/app-bridge-react";
-import { useLocation } from "@remix-run/react";
+import { useLocation, useNavigate } from "@remix-run/react";
 import { ruleStatus, applyOptions, priceOptions } from "../constants";
 import pricingRuleApi from "../api/pricing-rule";
 
 export default function () {
 	const shopify = useAppBridge();
+	const navigate = useNavigate();
 	const { state } = useLocation();
 	const [searchText, setSearchText] = useState("");
 	const [searchPricingRules, setSearchPricingRules] = useState([]);
@@ -24,19 +25,18 @@ export default function () {
 	const deletePricingRule = useCallback(async function (id) {
 		const deletedRule = await pricingRuleApi.delete({}, id);
 		const rules = await pricingRuleApi.all({});
-		const message = `Pricing rule ${deletedRule.generalInformation.name} has been deleted`;
 
 		setSearchPricingRules(rules);
-		await shopify.toast.show(message);
-	}, [shopify.toast]);
-
-	const fetchData = useCallback(async function () {
-		const rules = await pricingRuleApi.all({});
-
-		setSearchPricingRules(rules);
-	}, [])
+		navigate("#", { state: { name: deletedRule.generalInformation.name, type: "deleted" } })
+	}, [navigate]);
 
 	useEffect(function () {
+		const fetchData = async function () {
+			const rules = await pricingRuleApi.all({});
+
+			setSearchPricingRules(rules);
+		}
+		
 		fetchData();
 	}, []);
 

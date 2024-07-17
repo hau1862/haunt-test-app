@@ -3,7 +3,7 @@ import { Autocomplete, InlineStack, Tag, BlockStack, Icon } from "@shopify/polar
 import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
 import { useFetcher } from "@remix-run/react";
 
-export default function SelectProductTags({ productTags, setProductTags }) {
+export default function SelectProductTags({ productTags = [], setProductTags = function(tags = []) {} }) {
 	const fetcher = useFetcher();
 	const [allTags, setAllTags] = useState([]);
 	const [searchText, setSearchText] = useState("");
@@ -16,12 +16,17 @@ export default function SelectProductTags({ productTags, setProductTags }) {
 		}));
 	}, [allTags]);
 
-	const addProductTag = useCallback(function (productTag) {
-		fetcher.submit(
-			{ name: "productTagCreate", data: { tag: searchText } },
-			{ method: "POST", encType: "application/json" }
-		)
-	}, [fetcher, searchText]);
+	const addProductTag = useCallback(function () {
+		const tagContent = searchText.trim();
+
+		if(tagContent) {
+			searchText.trim() && fetcher.submit(
+				{ name: "productTagCreate", data: { tag: searchText } },
+				{ method: "POST", encType: "application/json" }
+			)
+			setProductTags(productTags.concat(tagContent))
+		}
+	}, [fetcher, productTags, setProductTags, searchText]);
 
 	const removeProductTag = useCallback(function (productTag) {
 		setProductTags(productTags.filter(function (item) {

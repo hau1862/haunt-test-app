@@ -9,6 +9,7 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 	const [searchText, setSearchText] = useState("");
 	const [searchProducts, setSearchProducts] = useState([]);
 	const [selectedProductIds, setSelectedProductIds] = useState([]);
+	const [loading, setLoading] = useState(false);
 	
 	const changeSearchText = useCallback(function (searchText) {
 		setSearchText(searchText);
@@ -29,11 +30,13 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 			{ name: "products", data: { first: 20, title: "" } },
 			{ method: "POST", encType: "application/json" },
 		);
+		setLoading(true);
 	}, []);
 
 	useEffect(function () {
 		if (fetcher.data?.ok) {
 			setSearchProducts(fetcher.data.products);
+			setLoading(false);
 		}
 	}, [fetcher]);
 
@@ -85,6 +88,7 @@ export default function SelectProductIds({ productIds, setProductIds }) {
 							</ResourceItem>
 						);
 					}}
+					loading={loading}
 				/>
 			</Modal>
 			<BlockStack gap="200">

@@ -10,29 +10,57 @@ function convertToAppData(graphqlData) {
 	return graphqlData.node;
 }
 
-function convertToGraphqlData(appData) {}
+function convertToGraphqlData(appData) {
+	return {
+		node: appData
+	}
+}
 
 export default {
 	create: async function (request = {}, data = { tag: "" }) {
 		const { admin } = await authenticate.admin(request);
-		const createProductResponse = await admin.graphql(
-			`mutation productCreate($input: ProductInput!) {
-				productCreate(input: $input) {
-					product {
+		const getProductResponse = await admin.graphql(
+			`query products($first: Int!, $query: String) {
+				products(first: $first, query: $query) {
+					nodes {
 						id
 					}
-				}	
+				}
 			}`,
 			{
 				variables: {
-					input: {
-						title: "add tag"
-					},
+					first: 1,
+					query: "title:'Tags Add Product'"
 				},
 			},
 		);
-		const createProductResponseJson = await createProductResponse.json();
-		const rawProduct = createProductResponseJson.data.productCreate.product;
+		const getProductResponseJson = await getProductResponse.json();
+		const rawProduct = getProductResponseJson.data.products?.nodes[0];
+		let id = "";
+		if(rawProduct) {
+			id = rawProduct.id;
+		} else {
+			const createProductResponse = await admin.graphql(
+				`mutation productCreate($input: ProductInput!) {
+					productCreate(input: $input) {
+						product {
+							id
+						}
+					}	
+				}`,
+				{
+					variables: {
+						input: {
+							title: "Tags Add Product",
+							category: "gid://shopify/TaxonomyCategory/so"
+						},
+					},
+				},
+			);
+			const createProductResponseJson = await createProductResponse.json();
+			id = createProductResponseJson.data.productCreate.product?.id;
+		}
+
 		const response = await admin.graphql(
 			`mutation tagsAdd($id: ID!, $tags: [String!]!) {
 				tagsAdd(id: $id, tags: $tags) {
@@ -43,26 +71,12 @@ export default {
 			}`,
 			{
 				variables: {
-					id: rawProduct.id,
+					id,
 					tags: [data.tag]
 				},
 			},
 		);
 		const responseJson = await response.json();
-		const deleteProductResponse = await admin.graphql(
-			`mutation productDelete($input: ProductInput!) {
-				productDelete(input: $input) {
-					deletedProductId
-				}	
-			}`,
-			{
-				variables: {
-					input: {
-						id: rawProduct.id
-					}
-				},
-			},
-		)
 
 		return responseJson.data.tagsAdd.node.id;
 	},

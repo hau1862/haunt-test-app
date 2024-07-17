@@ -3,7 +3,7 @@
 client_id = "323e438a217f30c4d8881fe4e776ec15"
 name = "HauNT Test App"
 handle = "haunt-test-app-2"
-application_url = "https://emails-hughes-sister-for.trycloudflare.com"
+application_url = "https://retailers-piece-outstanding-printers.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_gift_cards,read_orders,read_products,write_custome
 
 [auth]
 redirect_urls = [
-  "https://emails-hughes-sister-for.trycloudflare.com/auth/callback",
-  "https://emails-hughes-sister-for.trycloudflare.com/auth/shopify/callback",
-  "https://emails-hughes-sister-for.trycloudflare.com/api/auth/callback"
+  "https://retailers-piece-outstanding-printers.trycloudflare.com/auth/callback",
+  "https://retailers-piece-outstanding-printers.trycloudflare.com/auth/shopify/callback",
+  "https://retailers-piece-outstanding-printers.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
