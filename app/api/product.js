@@ -10,6 +10,12 @@ featuredMedia {
 		}
 	}
 }
+tags
+collections(first: 20) {
+	nodes {
+		id
+	}
+}
 priceRangeV2 {
 	maxVariantPrice {
 		amount
@@ -21,9 +27,13 @@ function convertToAppData(graphqlData) {
 	return {
 		id: graphqlData.id,
 		title: graphqlData.title,
-		priceAmount: graphqlData.priceRangeV2?.maxVariantPrice.amount,
+		priceAmount: Number(graphqlData.priceRangeV2?.maxVariantPrice.amount) || 0,
 		currencyCode: graphqlData.priceRangeV2?.maxVariantPrice.currencyCode,
 		imageUrl: graphqlData.featuredMedia?.preview.image.url,
+		tags: graphqlData.tags,
+		collectionIds: graphqlData.collections.nodes.map(function (item) {
+			return item.id;
+		})
 	};
 }
 
@@ -38,6 +48,8 @@ function convertToGraphqlData(appData) {
 				},
 			},
 		},
+		tags: appData.tags,
+		collections: appData.collectionIds,
 		priceRangeV2: {
 			maxVariantPrice: {
 				amount: appData.priceAmount,

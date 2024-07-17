@@ -6,15 +6,15 @@ const utils = {
 	set: function (data = []) {
 		localStorage.setItem(this.key, JSON.stringify(data));
 	}
-}
+};
 
 export default {
 	create: async function (request = {}, data = {}) {
 		const pricingRules = utils.get();
-		const newRule = { id: pricingRules.length, ...data }
+		const newRule = { id: pricingRules.length, ...data };
 
 		utils.set(pricingRules.concat(newRule));
-		
+
 		return newRule;
 	},
 	all: async function (request = {}) {
@@ -24,7 +24,7 @@ export default {
 		const pricingRules = utils.get();
 		const readIndex = pricingRules.findIndex(function (item) {
 			return item.id === id;
-		})
+		});
 
 		return pricingRules[readIndex];
 	},
@@ -34,8 +34,8 @@ export default {
 			return item.id === id;
 		});
 
-		if(updateIndex >= 0) {
-			pricingRules[updateIndex] = {...pricingRules[updateIndex], ...data};
+		if (updateIndex >= 0) {
+			pricingRules[updateIndex] = { ...pricingRules[updateIndex], ...data };
 			utils.set(pricingRules);
 		}
 
@@ -46,13 +46,52 @@ export default {
 		const deleteIndex = pricingRules.findIndex(function (item) {
 			return item.id === id;
 		});
-		
-		if(deleteIndex >= 0) {
+
+		if (deleteIndex >= 0) {
 			utils.set(pricingRules.filter(function (item) {
 				return item.id !== id;
 			}));
 		}
 
 		return pricingRules[deleteIndex];
+	},
+	validateProduct(rule, product) {
+		switch (rule.applyProducts.option) {
+			case 0: {
+				return true;
+			}
+			case 1: {
+				return rule.applyProducts.productIds.includes(product.id);
+			}
+			case 2: {
+				return rule.applyProducts.collectionIds.some(function (item) {
+					return product.collectionIds.includes(item);
+				});
+			}
+			case 3: {
+				return rule.applyProducts.productTags.some(function (item) {
+					return product.productTags.includes(item);
+				});
+			}
+			default: {
+				return false;
+			}
+		}
+	},
+	calculatePrice(rule, product) {
+		switch (rule.customPrices.option) {
+			case 0: {
+				return rule.customPrices.amount;
+			}
+			case 1: {
+				return Math.max(product.priceAmount - rule.customPrices.amount, 0);
+			}
+			case 2: {
+				return product.priceAmount * (1 - rule.customPrices.amount / 100);
+			}
+			default: {
+				return product.priceAmount;
+			}
+		}
 	}
-}
+};
