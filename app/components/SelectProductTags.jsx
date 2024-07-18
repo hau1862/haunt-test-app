@@ -3,7 +3,7 @@ import { Autocomplete, InlineStack, Tag, BlockStack, Icon } from "@shopify/polar
 import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
 import { useFetcher } from "@remix-run/react";
 
-export default function SelectProductTags({ productTags = [], setProductTags = function(tags = []) {} }) {
+export default function SelectProductTags({ productTags = [], setProductTags = function (tags = []) { } }) {
 	const fetcher = useFetcher();
 	const [allTags, setAllTags] = useState([]);
 	const [searchText, setSearchText] = useState("");
@@ -19,12 +19,12 @@ export default function SelectProductTags({ productTags = [], setProductTags = f
 	const addProductTag = useCallback(function () {
 		const tagContent = searchText.trim();
 
-		if(tagContent) {
+		if (tagContent && !productTags.includes(tagContent)) {
 			searchText.trim() && fetcher.submit(
 				{ name: "productTagCreate", data: { tag: searchText } },
 				{ method: "POST", encType: "application/json" }
-			)
-			setProductTags(productTags.concat(tagContent))
+			);
+			setProductTags(productTags.concat(tagContent));
 		}
 	}, [fetcher, productTags, setProductTags, searchText]);
 
@@ -36,17 +36,17 @@ export default function SelectProductTags({ productTags = [], setProductTags = f
 
 	useEffect(function () {
 		fetcher.submit(
-			{ name: "productTags", data: { first: 20 }},
+			{ name: "productTags", data: { first: 20 } },
 			{ method: "POST", encType: "application/json" }
 		);
 	}, []);
 
 	useEffect(function () {
-		if(fetcher.data?.ok && fetcher.data.name === "productTags") {
+		if (fetcher.data?.ok && fetcher.data.name === "productTags") {
 			setAllTags(fetcher.data.productTags);
-			setSearchTags(fetcher.data.productTags)
+			setSearchTags(fetcher.data.productTags);
 		}
-	}, [fetcher])
+	}, [fetcher]);
 
 	return (
 		<BlockStack gap="300">
@@ -65,7 +65,7 @@ export default function SelectProductTags({ productTags = [], setProductTags = f
 					/>
 				}
 				options={searchTags.map(function (item) {
-					return { label: item, value: item }
+					return { label: item, value: item };
 				})}
 				selected={productTags}
 				onSelect={setProductTags}

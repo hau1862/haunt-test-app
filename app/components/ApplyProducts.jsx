@@ -3,9 +3,10 @@ import { BlockStack, Card, ChoiceList, Text } from "@shopify/polaris";
 import SelectProductIds from "./SelectProductIds";
 import SelectCollectionIds from "./SelectCollectionIds";
 import SelectProductTags from "./SelectProductTags";
+import { samplePricingRule } from "../constants";
 
-export default function ApplyProducts({ applyProducts, setApplyProducts }) {
-	const changeOption = useCallback(function ([option]) {
+export default function ApplyProducts({ applyProducts = samplePricingRule.applyProducts, setApplyProducts = function (data = samplePricingRule.applyProducts) { } }) {
+	const changeOption = useCallback(function (option) {
 		setApplyProducts({ ...applyProducts, option });
 	}, [applyProducts, setApplyProducts]);
 
@@ -73,7 +74,7 @@ export default function ApplyProducts({ applyProducts, setApplyProducts }) {
 						},
 					]}
 					selected={[applyProducts.option]}
-					onChange={changeOption}
+					onChange={([option]) => changeOption(option)}
 				/>
 			</BlockStack>
 		</Card>

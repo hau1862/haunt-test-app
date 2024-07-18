@@ -3,7 +3,7 @@
 client_id = "323e438a217f30c4d8881fe4e776ec15"
 name = "HauNT Test App"
 handle = "haunt-test-app-2"
-application_url = "https://genesis-nevada-pulse-integrity.trycloudflare.com"
+application_url = "https://continuous-imagination-era-beside.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_gift_cards,read_orders,read_products,write_custome
 
 [auth]
 redirect_urls = [
-  "https://genesis-nevada-pulse-integrity.trycloudflare.com/auth/callback",
-  "https://genesis-nevada-pulse-integrity.trycloudflare.com/auth/shopify/callback",
-  "https://genesis-nevada-pulse-integrity.trycloudflare.com/api/auth/callback"
+  "https://continuous-imagination-era-beside.trycloudflare.com/auth/callback",
+  "https://continuous-imagination-era-beside.trycloudflare.com/auth/shopify/callback",
+  "https://continuous-imagination-era-beside.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

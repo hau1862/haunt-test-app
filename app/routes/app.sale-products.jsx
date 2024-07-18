@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, Link } from "@remix-run/react";
 import { Page, BlockStack, TextField, Icon, Avatar, DataTable } from "@shopify/polaris";
 import { SearchIcon } from "@shopify/polaris-icons";
 import productApi from "../api/product";
@@ -23,7 +23,7 @@ export default function () {
 	const fetcher = useFetcher();
 	const [searchText, setSearchText] = useState("");
 	const [searchProducts, setSearchProducts] = useState([]);
-	const [pricingRules, setPricingRules] = useState([]);
+	const [enabledPricingRules, setEnabledPricingRules] = useState([]);
 
 	const changeSearchText = useCallback(function (text) {
 		setSearchText(text);
@@ -41,7 +41,9 @@ export default function () {
 		);
 		(async function () {
 			const rules = await pricingRuleApi.all();
-			setPricingRules(rules);
+			setEnabledPricingRules(rules.filter(function (rule) {
+				return rule.generalInformation.status === 1;
+			}));
 		})();
 	}, []);
 
@@ -52,7 +54,10 @@ export default function () {
 	}, [fetcher]);
 
 	return (
-		<Page title="Sale Products">
+		<Page
+			title="Sale Products"
+			primaryAction={{ content: "View pricing rules", url: "/app/pricing-rules" }}
+		>
 			<BlockStack gap="200">
 				<TextField
 					type="text"
@@ -65,19 +70,20 @@ export default function () {
 					headings={["", "Product name", "Compare price", "Sale price"]}
 					columnContentTypes={["text", "text", "text", "text"]}
 					verticalAlign="center"
-					rows={searchProducts.filter(function(product) {
-						return pricingRules.some(function(rule) {
+					rows={searchProducts.filter(function (product) {
+						return enabledPricingRules.some(function (rule) {
 							return pricingRuleApi.validateProduct(rule, product);
 						});
 					}).map(function (item) {
 						return [
 							<Avatar source={item.imageUrl} size="xl" key={item.id} />,
 							// <a href={item.id.replace("gid://shopify/Product", "https://admin.shopify.com/store/store-training-hau-nt1/products")} key={item.id}>{item.title}</a>,
+							// <Link to={item.id.replace("gid://shopify/Product", "https://admin.shopify.com/store/store-training-hau-nt1/products")} key={item.id}>{item.title}</Link>,
 							item.title,
 							item.priceAmount + " " + item.currencyCode,
-							Math.min(pricingRules.map(function(rule) {
+							Math.min(enabledPricingRules.map(function (rule) {
 								return pricingRuleApi.calculatePrice(rule, item);
-							})) + " " +  item.currencyCode
+							})) + " " + item.currencyCode
 						];
 					})}
 				/>

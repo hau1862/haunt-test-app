@@ -1,19 +1,20 @@
 import { useCallback } from "react";
 import { Card, Text, ChoiceList, BlockStack, TextField } from "@shopify/polaris";
+import { samplePricingRule } from "../constants";
 
-export default function CustomPrices({ customPrices, setCustomPrices }) {
-	const changeOption = useCallback(function ([option]) {
-		setCustomPrices({ ...customPrices, option, suffix: (option === 2 ? "%" : "$") });
+export default function CustomPrices({ customPrices = samplePricingRule.customPrices, setCustomPrices = function (data = samplePricingRule) { } }) {
+	const changeOption = useCallback(function (option) {
+		setCustomPrices({ ...customPrices, option, suffix: option === 2 ? customPrices.percent : " " + customPrices.currencyCode });
 	}, [customPrices, setCustomPrices]);
 
 	const changeAmount = useCallback(function (amount) {
-		setCustomPrices({ ...customPrices, amount });
+		setCustomPrices({ ...customPrices, amount: customPrices.option === 2 ? Math.min(amount, customPrices.maxDecreasePercent) : amount });
 	}, [customPrices, setCustomPrices]);
 
 	return (
 		<Card>
 			<BlockStack gap="500">
-				<Text 
+				<Text
 					as="h1"
 					variant="headingMd"
 					children="Custom Prices"
@@ -25,14 +26,16 @@ export default function CustomPrices({ customPrices, setCustomPrices }) {
 						{ label: "Decrease the original prices of selected products by a percentage (%)", value: 2 },
 					]}
 					selected={[customPrices.option]}
-					onChange={changeOption}
+					onChange={([option]) => changeOption(option)}
 				/>
 				<TextField
 					type="number"
 					label="Amount"
 					value={customPrices.amount}
-					onChange={changeAmount}
-					suffix={customPrices.option === 2 ? "%" : "$"}
+					onChange={(amount) => changeAmount(Number.parseInt(amount))}
+					min="0"
+					max={customPrices.option === 2 ? customPrices.maxDecreasePercent : undefined}
+					suffix={customPrices.suffix}
 				/>
 			</BlockStack>
 		</Card>

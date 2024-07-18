@@ -11,7 +11,7 @@ const utils = {
 export default {
 	create: async function (request = {}, data = {}) {
 		const pricingRules = utils.get();
-		const newRule = { id: pricingRules.length, ...data };
+		const newRule = { id: pricingRules[0] ? pricingRules[0].id + 1 : pricingRules.length, ...data };
 
 		utils.set(pricingRules.concat(newRule));
 
@@ -81,13 +81,13 @@ export default {
 	calculatePrice(rule, product) {
 		switch (rule.customPrices.option) {
 			case 0: {
-				return rule.customPrices.amount;
+				return Math.min(product.priceAmount, rule.customPrices.amount);
 			}
 			case 1: {
 				return Math.max(product.priceAmount - rule.customPrices.amount, 0);
 			}
 			case 2: {
-				return product.priceAmount * (1 - rule.customPrices.amount / 100);
+				return Number.parseInt(product.priceAmount * (1 - rule.customPrices.amount / 100));
 			}
 			default: {
 				return product.priceAmount;

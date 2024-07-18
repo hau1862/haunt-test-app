@@ -27,7 +27,7 @@ function convertToAppData(graphqlData) {
 	return {
 		id: graphqlData.id,
 		title: graphqlData.title,
-		priceAmount: Number(graphqlData.priceRangeV2?.maxVariantPrice.amount) || 0,
+		priceAmount: Number.parseInt(graphqlData.priceRangeV2?.maxVariantPrice.amount) || 0,
 		currencyCode: graphqlData.priceRangeV2?.maxVariantPrice.currencyCode,
 		imageUrl: graphqlData.featuredMedia?.preview.image.url,
 		tags: graphqlData.tags,
